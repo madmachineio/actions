@@ -1,0 +1,80 @@
+name: Reusable mock test workflow for Swift Package
+
+
+on:
+  workflow_call:
+
+
+env:
+   SDK_VERSION: '0.6.0'
+   LINUX_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/0.6.0-alpha.4/mm-sdk-0.6.0-alpha.4-ubuntu18.04-x64.tar.bz2'
+   MACOS_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/0.6.0-alpha.4/mm-sdk-0.6.0-alpha.4-macOS-x64.zip'
+
+
+jobs:
+  mock_test:
+    name: Test on ${{ matrix.os }}
+    strategy:
+      matrix:
+        # os: [ubuntu-20.04, macos-10.15, macos-11]
+        os: [ubuntu-20.04, macos-10.15]
+        # os: [ubuntu-20.04]
+        swift: ["5.4.0"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Check action type
+        run: |
+          echo "OS: $RUNNER_OS"
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Commit: $GITHUB_SHA"
+          echo "Branch: `git rev-parse --abbrev-ref HEAD`"
+
+      - name: Prepare Swift
+        uses: fwal/setup-swift@v1
+        with:
+          swift-version: ${{ matrix.swift }}
+
+      - name: Get Swift version
+        run: swift --version
+
+      - name: Prepare mm-sdk
+        id: prepare-sdk
+        run: |
+          echo "Get mm-sdk on $RUNNER_OS"
+          if [ "$RUNNER_OS" == 'Linux' ];then
+            wget ${{ env.LINUX_SDK }} -O ~/sdk.tar.bz2
+            tar -jxvf ~/sdk.tar.bz2 -C ~/
+          elif [ "$RUNNER_OS" == 'macOS' ];then
+            wget ${{ env.MACOS_SDK }} -O ~/sdk.zip
+            unzip ~/sdk.zip -d ~/
+          else
+            ehco "Unrecognized OS $RUNNER_OS"
+            exit 1
+          fi
+          echo "::set-output name=SDK_VERSION::$(~/mm-sdk/usr/mm/mm --version)"
+      
+      - name: Abort if mm-sdk version not match
+        if: ${{ steps.prepare-sdk.outputs.SDK_VERSION != env.SDK_VERSION }}
+        run: |
+          echo "Required SDK version: ${{ env.SDK_VERSION }}"
+          echo "Current SDK version: ${{ steps.prepare-sdk.outputs.SDK_VERSION }}"
+          exit 1
+
+      - name: Run mock test
+        run: |
+          cd $GITHUB_WORKSPACE
+          rm -rf .build
+          rm -rf Package.resolved
+          rm -rf info.lcov
+          ~/mm-sdk/usr/mm/mm host-test
+          if [ ! -f "info.lcov" ]; then
+            exit 1 
+          fi
+
+      - name: Upload code report
+        uses: codecov/codecov-action@v2
+        with:
+          files: ./info.lcov
