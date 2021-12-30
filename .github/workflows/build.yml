@@ -107,7 +107,7 @@ jobs:
           rm -rf .build
           rm -rf Package.resolved
           if [ -f "Package.swift" ]; then
-            ~/mm-sdk/usr/mm/mm cibuild
+            ~/mm-sdk/usr/mm/mm ci-build
           fi
           rm -rf .build
           rm -rf Package.resolved
@@ -125,7 +125,7 @@ jobs:
 
             rm -rf .build
             rm -rf Package.resolved
-            ~/mm-sdk/usr/mm/mm cibuild
+            ~/mm-sdk/usr/mm/mm ci-build
             rm -rf .build
             rm -rf Package.resolved
 
