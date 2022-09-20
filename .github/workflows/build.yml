@@ -8,7 +8,7 @@ on:
 env:
    SDK_VERSION: '0.7.0'
    LINUX_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/0.7.0-alpha.1/mm-sdk-0.7.0-alpha.1-ubuntu20.04-x64.tar.bz2'
-   MACOS_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/0.7.0-alpha.0/mm-sdk-0.7.0-alpha.0-macOS-x64.zip'
+   MACOS_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/0.7.0-alpha.1/mm-sdk-0.7.0-alpha.1-macOS-x64.zip'
 
 
 jobs:
