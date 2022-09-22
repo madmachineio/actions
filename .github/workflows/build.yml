@@ -93,9 +93,9 @@ jobs:
               LINE_NUMBER=$(sed -n "/$REPO_ADDR/=" ./Package.swift)
               echo "Modifying line $LINE_NUMBER from:"
               cat ./Package.swift | head -n "$LINE_NUMBER" | tail -n 1
-              sed -i'.bak' -e ""$LINE_NUMBER"s/madmachineio/"$GITHUB_REPOSITORY_OWNER"/g" ./Package.swift
-              sed -i'.bak' -e ""$LINE_NUMBER"s/branch(\"main\")/revision(\"$GITHUB_SHA\")/g" ./Package.swift
-              sed -i'.bak' -e ""$LINE_NUMBER"s/branch:\s*\"main\"/.revision(\"$GITHUB_SHA\")/g" ./Package.swift
+              sed -i'.bak' -e '"$LINE_NUMBER"s/madmachineio/"$GITHUB_REPOSITORY_OWNER"/g' ./Package.swift
+              sed -i'.bak' -e '"$LINE_NUMBER"s/.branch("main")/.revision("$GITHUB_SHA")/g' ./Package.swift
+              sed -i'.bak' -e '"$LINE_NUMBER"s/branch: *"main"/.revision("$GITHUB_SHA")/g' ./Package.swift
               echo "to:"
               cat ./Package.swift | head -n "$LINE_NUMBER" | tail -n 1
             fi
