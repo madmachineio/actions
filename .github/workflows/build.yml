@@ -91,7 +91,7 @@ jobs:
             if [ -f "$GITHUB_WORKSPACE/Package.swift" ]; then
               echo "Start modifying example package dependency to: $GITHUB_SHA"
               LINE_NUMBER=$(sed -n "/$REPO_ADDR/=" ./Package.swift)
-              if [ -n $LINE_NUMBER ]; then
+              if [ -n "$LINE_NUMBER" ]; then
                 echo "Modifying line $LINE_NUMBER from:"
                 cat ./Package.swift | head -n "$LINE_NUMBER" | tail -n 1
                 if [ "$RUNNER_OS" == 'Linux' ]; then
