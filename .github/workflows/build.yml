@@ -74,7 +74,7 @@ jobs:
           fi
           rm -rf .build
           rm -rf Package.resolved
-          echo "::set-output name=EXAMPLES::$(find . -maxdepth 1 -name "Examples")"
+          echo "EXAMPLES=$(find . -maxdepth 1 -name "Examples")" >> $GITHUB_OUTPUT
 
       - name: Build default examples
         if: ${{ steps.build-project.outputs.EXAMPLES != '' }}
