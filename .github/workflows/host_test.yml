@@ -54,7 +54,7 @@ jobs:
             ehco "Unrecognized OS $RUNNER_OS"
             exit 1
           fi
-          echo "::set-output name=SDK_VERSION::$(~/mm-sdk/usr/mm/mm --version)"
+          echo "SDK_VERSION=$(~/mm-sdk/usr/mm/mm --version)" >> $GITHUB_OUTPUT
       
       - name: Abort if mm-sdk version not match
         if: ${{ steps.prepare-sdk.outputs.SDK_VERSION != env.SDK_VERSION }}
