@@ -31,13 +31,13 @@ jobs:
           echo "Commit: $GITHUB_SHA"
           echo "Branch: `git rev-parse --abbrev-ref HEAD`"
 
-      - name: Prepare Swift environment
-        uses: fwal/setup-swift@v1
-        with:
-          swift-version: ${{ matrix.swift }}
+      # - name: Prepare Swift environment
+      #   uses: fwal/setup-swift@v1
+      #   with:
+      #     swift-version: ${{ matrix.swift }}
 
-      - name: Get Swift version
-        run: swift --version
+      # - name: Get Swift version
+      #   run: swift --version
 
       - name: Prepare mm-sdk
         id: prepare-sdk
