@@ -7,8 +7,8 @@ on:
 
 env:
    SDK_VERSION: '0.9.0'
-   LINUX_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/0.9.0-alpha.2/mm-sdk-0.9.0-alpha.2-ubuntu22.04-x64.tar.bz2'
-   MACOS_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/0.9.0-alpha.2/mm-sdk-0.9.0-alpha.2-macOS-x64.zip'
+   LINUX_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/0.9.0-alpha.3/mm-sdk-0.9.0-alpha.3-ubuntu22.04-x64.tar.bz2'
+   MACOS_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/0.9.0-alpha.3/mm-sdk-0.9.0-alpha.3-macOS-x64.zip'
 
 
 jobs:
@@ -17,8 +17,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04, macos-11, macos-12, macos-13]
-        # os: [ubuntu-22.04]
-        swift: ["5.8"]
+        # swift: ["5.8"]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
