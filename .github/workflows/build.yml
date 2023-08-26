@@ -7,7 +7,7 @@ on:
 
 env:
    SDK_VERSION: '0.9.0'
-   LINUX_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/0.9.0-alpha.3/mm-sdk-0.9.0-alpha.3-ubuntu22.04-x64.tar.bz2'
+   LINUX_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/0.9.0-alpha.4/mm-sdk-0.9.0-alpha.4-ubuntu22.04-x64.tar.bz2'
    MACOS_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/0.9.0-alpha.3/mm-sdk-0.9.0-alpha.3-macOS-x64.zip'
 
 
