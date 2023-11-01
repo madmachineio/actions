@@ -7,8 +7,8 @@ on:
 
 env:
    SDK_VERSION: '0.9.1'
-   LINUX_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/0.9.1-alpha.0/mm-sdk-0.9.1-alpha.0-ubuntu22.04-x64.tar.bz2'
-   MACOS_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/0.9.1-alpha.0/mm-sdk-0.9.1-alpha.0-macOS-x64.zip'
+   LINUX_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/0.9.1-alpha.1/mm-sdk-0.9.1-alpha.1-ubuntu22.04-x64.tar.bz2'
+   MACOS_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/0.9.1-alpha.1/mm-sdk-0.9.1-alpha.1-macOS-macSDK13.1-x64.zip'
 
 
 jobs:
@@ -21,7 +21,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Check action type
         run: |
