@@ -55,6 +55,7 @@ jobs:
             else
               echo "Unsupported ARCH $RUNNER_ARCH"
               exit 1
+            fi
             unzip ~/sdk.zip -d ~/
           else
             ehco "Unrecognized OS $RUNNER_OS"
