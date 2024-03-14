@@ -57,6 +57,7 @@ jobs:
               exit 1
             fi
             unzip ~/sdk.zip -d ~/
+            ls ~/mm-sdk/usr/mm
           else
             echo "Unrecognized OS $RUNNER_OS"
             exit 1
