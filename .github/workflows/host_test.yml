@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         # os: [ubuntu-22.04, macos-12, macos-13]
-        os: [macos-12, macos-13]
+        os: [macos-12, macos-13, macos-14]
         # swift: ["5.9"]
     runs-on: ${{ matrix.os }}
     steps:
@@ -43,7 +43,7 @@ jobs:
       - name: Prepare mm-sdk
         id: prepare-sdk
         run: |
-          echo "Get mm-sdk on $RUNNER_OS"
+          echo "Get mm-sdk on $RUNNER_OS $RUNNER_ARCH"
           if [ "$RUNNER_OS" == 'Linux' ];then
             wget ${{ env.LINUX_SDK }} -O ~/sdk.tar.bz2
             tar -jxvf ~/sdk.tar.bz2 -C ~/
@@ -57,7 +57,6 @@ jobs:
               exit 1
             fi
             unzip ~/sdk.zip -d ~/
-            ls ~/mm-sdk/usr/mm
           else
             echo "Unrecognized OS $RUNNER_OS"
             exit 1
