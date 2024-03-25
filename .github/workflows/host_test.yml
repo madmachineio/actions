@@ -7,7 +7,7 @@ on:
 
 env:
    SDK_VERSION: '0.9.3'
-   LINUX_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/0.9.1-alpha.1/mm-sdk-0.9.1-alpha.1-ubuntu22.04-x64.tar.bz2'
+   LINUX_SDK: 'https://github.com/madmachineio/actions/releases/download/packages/mm-sdk-0.9.3-beta.0-ubuntu22.04-x64.tar.bz2'
    MACOS_X64_SDK: 'https://github.com/madmachineio/actions/releases/download/packages/mm-sdk-0.9.3-beta.0-macOS-x64.zip'
    MACOS_ARM64_SDK: 'https://github.com/madmachineio/actions/releases/download/packages/mm-sdk-0.9.3-beta.0-macOS-arm64.zip'
 
@@ -17,8 +17,8 @@ jobs:
     name: Test on ${{ matrix.os }}
     strategy:
       matrix:
-        # os: [ubuntu-22.04, macos-12, macos-13]
-        os: [macos-12, macos-13, macos-14]
+        os: [ubuntu-22.04, macos-12, macos-13, macos-14]
+        # os: [macos-12, macos-13, macos-14]
         # swift: ["5.9"]
     runs-on: ${{ matrix.os }}
     steps:
