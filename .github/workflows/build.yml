@@ -6,10 +6,12 @@ on:
 
 
 env:
-   SDK_VERSION: '0.9.3'
-   LINUX_SDK: 'https://github.com/madmachineio/actions/releases/download/packages/mm-sdk-0.9.3-beta.0-ubuntu22.04-x64.tar.bz2'
-   MACOS_X64_SDK: 'https://github.com/madmachineio/actions/releases/download/packages/mm-sdk-0.9.3-beta.0-macOS-x64.zip'
-   MACOS_ARM64_SDK: 'https://github.com/madmachineio/actions/releases/download/packages/mm-sdk-0.9.3-beta.0-macOS-arm64.zip'
+  SDK_VERSION: '0.9.3'
+  LINUX_SDK: 'https://github.com/madmachineio/actions/releases/download/packages/mm-sdk-0.9.3-beta.0-ubuntu22.04-x64.tar.bz2'
+  MACOS_X64_SDK: 'https://github.com/madmachineio/actions/releases/download/packages/mm-sdk-0.9.3-beta.0-macOS-x64.zip'
+  MACOS_ARM64_SDK: 'https://github.com/madmachineio/actions/releases/download/packages/mm-sdk-0.9.3-beta.0-macOS-arm64.zip'
+  SWIFT_MACOS: 'https://download.swift.org/development/xcode/swift-DEVELOPMENT-SNAPSHOT-2024-09-18-a/swift-DEVELOPMENT-SNAPSHOT-2024-09-18-a-osx.pkg'
+  SWIFT_LINUX: 'https://download.swift.org/development/ubuntu2204/swift-DEVELOPMENT-SNAPSHOT-2024-09-18-a/swift-DEVELOPMENT-SNAPSHOT-2024-09-18-a-ubuntu22.04.tar.gz'
 
 
 jobs:
@@ -18,8 +20,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04, macos-12, macos-13, macos-14]
-        # os: [macos-12, macos-13, macos-14]
-        # swift: ["5.9"]
+        # swift: ["6.0"]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
@@ -39,6 +40,25 @@ jobs:
 
       # - name: Get Swift version
       #   run: swift --version
+
+      - name: Prepare Swift enviroment
+        run: |
+          if [ "$RUNNER_OS" == 'macOS' ];then
+            if [ "$RUNNER_ARCH" == 'X64' ];then
+              wget ${{ env.SWIFT_MACOS }} -O ~/swift.pkg
+            elif [ "$RUNNER_ARCH" == 'ARM64' ];then
+              wget ${{ env.SWIFT_MACOS }} -O ~/swift.pkg
+            else
+              echo "Unsupported ARCH $RUNNER_ARCH"
+              exit 1
+            fi
+            sudo installer -pkg swift.pkg -target /Library/Developer/Toolchains
+          elif [ "$RUNNER_OS" == 'Linux' ];then 
+            wget ${{ env.SWIFT_LINUX }} -O ~/swift.tar.gz
+            #tar -zxvf ~/swift.tar.gz --strip-components 1 -C ~/mm-sdk
+
+      - name: Get Swift version
+        run: swift --version
 
       - name: Prepare mm-sdk
         id: prepare-sdk
