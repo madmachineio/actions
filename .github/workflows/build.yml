@@ -55,7 +55,8 @@ jobs:
             sudo installer -pkg swift.pkg -target /Library/Developer/Toolchains
           elif [ "$RUNNER_OS" == 'Linux' ];then 
             wget ${{ env.SWIFT_LINUX }} -O ~/swift.tar.gz
-            #tar -zxvf ~/swift.tar.gz --strip-components 1 -C ~/mm-sdk
+            mkdir ~/mm-sdk
+            tar -zxvf ~/swift.tar.gz --strip-components 1 -C ~/mm-sdk
 
       - name: Get Swift version
         run: swift --version
