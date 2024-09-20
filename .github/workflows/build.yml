@@ -53,6 +53,7 @@ jobs:
               echo "Unsupported ARCH $RUNNER_ARCH"
               exit 1
             fi
+            mkdir -p /Library/Developer/Toolchains
             sudo installer -pkg ~/swift.pkg -target /Library/Developer/Toolchains
           elif [ "$RUNNER_OS" == 'Linux' ];then 
             wget -q ${{ env.SWIFT_LINUX }} -O ~/swift.tar.gz
