@@ -7,7 +7,7 @@ on:
 
 env:
   SDK_VERSION: '1.1.0'
-  LINUX_SDK: ''
+  LINUX_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.0/mm-sdk-1.1.0-alpha.0-ubuntu22.04-x64.tar.bz2'
   MACOS_X64_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.0/mm-sdk-1.1.0-alpha.0-macOS.zip'
   MACOS_ARM64_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.0/mm-sdk-1.1.0-alpha.0-macOS.zip'
   SWIFT_MACOS: 'https://download.swift.org/development/xcode/swift-DEVELOPMENT-SNAPSHOT-2024-09-18-a/swift-DEVELOPMENT-SNAPSHOT-2024-09-18-a-osx.pkg'
@@ -19,8 +19,8 @@ jobs:
     name: Build on ${{ matrix.os }}
     strategy:
       matrix:
-        # os: [ubuntu-22.04, macos-13, macos-14]
-        os: [macos-13, macos-14]
+        os: [ubuntu-22.04, macos-13, macos-14]
+        # os: [macos-13, macos-14]
         # swift: ["6.0"]
     runs-on: ${{ matrix.os }}
     steps:
