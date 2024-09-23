@@ -174,7 +174,7 @@ jobs:
             rm -rf .build
             rm -rf Package.resolved
 
-            cp -rf thumbv7em-unknown-none-eabi* $GITHUB_WORKSPACE
+            cp -rf armv7em-none-none-eabi* $GITHUB_WORKSPACE
           done
 
       - name: Upload artifacts
@@ -182,6 +182,5 @@ jobs:
         with:
           name: Binary build on ${{ matrix.os }}
           path: |
-            thumbv7em-unknown-none-eabi
-            thumbv7em-unknown-none-eabihf
+            armv7em-none-none-eabi
           retention-days: 7
