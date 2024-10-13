@@ -7,9 +7,9 @@ on:
 
 env:
   SDK_VERSION: '1.1.0'
-  LINUX_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.2/mm-sdk-1.1.0-alpha.2-ubuntu22.04-x64.tar.bz2'
-  MACOS_X64_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.2/mm-sdk-1.1.0-alpha.2-macOS.zip'
-  MACOS_ARM64_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.2/mm-sdk-1.1.0-alpha.2-macOS.zip'
+  LINUX_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.3/mm-sdk-1.1.0-alpha.3-ubuntu22.04-x64.tar.bz2'
+  MACOS_X64_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.3/mm-sdk-1.1.0-alpha.3-macOS.zip'
+  MACOS_ARM64_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.3/mm-sdk-1.1.0-alpha.3-macOS.zip'
   SWIFT_MACOS: 'https://download.swift.org/development/xcode/swift-DEVELOPMENT-SNAPSHOT-2024-09-25-a/swift-DEVELOPMENT-SNAPSHOT-2024-09-25-a-osx.pkg'
   SWIFT_LINUX: 'https://download.swift.org/development/ubuntu2204/swift-DEVELOPMENT-SNAPSHOT-2024-09-25-a/swift-DEVELOPMENT-SNAPSHOT-2024-09-25-a-ubuntu22.04.tar.gz'
 
