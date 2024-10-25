@@ -51,7 +51,7 @@ jobs:
             exit 1
           }
 
-          $outputPath = '"$env:GITHUB_WORKSPACE\swift.exe"
+          $outputPath = "$env:GITHUB_WORKSPACE\swift.exe"
           Invoke-WebRequest -Uri $url -OutFile $outputPath
           Start-Process -FilePath "$env:GITHUB_WORKSPACE\swift.exe" -ArgumentList "/silent", "/verysilent" -Wait
 
