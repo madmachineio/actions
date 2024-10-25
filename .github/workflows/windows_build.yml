@@ -51,9 +51,10 @@ jobs:
             exit 1
           }
 
-          $outputPath = "$env:GITHUB_WORKSPACE\swift.exe"
+          $outputPath = "C:\swift.exe"
           Invoke-WebRequest -Uri $url -OutFile $outputPath
-          Start-Process -FilePath "$env:GITHUB_WORKSPACE\swift.exe" -ArgumentList "/silent", "/verysilent" -Wait
+          Start-Process -FilePath "$outputPath" -ArgumentList "/silent", "/verysilent" -Wait
+          ls "C:\Library\Developer\Toolchains"
 
       # - name: Get Swift version
       #   run: swift --version
