@@ -6,11 +6,11 @@ on:
 
 
 env:
-  SDK_VERSION: '1.1.0-alpha.4'
-  WIN_X64_SDK: ''
-  WIN_ARM64_SDK: ''
-  SWIFT_X64: 'https://download.swift.org/development/windows10/swift-DEVELOPMENT-SNAPSHOT-2024-09-24-a/swift-DEVELOPMENT-SNAPSHOT-2024-09-24-a-windows10.exe'
-  SWIFT_ARM64: 'https://download.swift.org/development/windows10-arm64/swift-DEVELOPMENT-SNAPSHOT-2024-09-24-a/swift-DEVELOPMENT-SNAPSHOT-2024-09-24-a-windows10-arm64.exe'
+  SDK_VERSION: "1.1.0-alpha.4"
+  WIN_X64_SDK: ""
+  WIN_ARM64_SDK: ""
+  SWIFT_X64: "https://download.swift.org/development/windows10/swift-DEVELOPMENT-SNAPSHOT-2024-09-24-a/swift-DEVELOPMENT-SNAPSHOT-2024-09-24-a-windows10.exe"
+  SWIFT_ARM64: "https://download.swift.org/development/windows10-arm64/swift-DEVELOPMENT-SNAPSHOT-2024-09-24-a/swift-DEVELOPMENT-SNAPSHOT-2024-09-24-a-windows10-arm64.exe"
 
 
 jobs:
@@ -47,13 +47,13 @@ jobs:
           } elseif ($env:RUNNER_ARCH -eq "ARM64") {
             $url = $env:SWIFT_ARM64
           } else {
-            echo "Unsupported ARCH $RUNNER_ARCH"
+            echo "Unsupported ARCH $env:RUNNER_ARCH"
             exit 1
           }
 
-          echo $url
-          $outputPath = 'C:\swift.exe'
+          $outputPath = '"$env:GITHUB_WORKSPACE\swift.exe"
           Invoke-WebRequest -Uri $url -OutFile $outputPath
+          Start-Process -FilePath "$env:GITHUB_WORKSPACE\swift.exe" -ArgumentList "/silent", "/verysilent" -Wait
 
       # - name: Get Swift version
       #   run: swift --version
