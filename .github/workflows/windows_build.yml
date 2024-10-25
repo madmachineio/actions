@@ -58,7 +58,7 @@ jobs:
 
       - name: Get Swift version
         run: |
-          Start-Process -FilePath "$env:SystemDrive\Users\runneradmin\AppData\Local\Programs\Swift\Toolchains\6.0.0+Asserts\usr\bin\swiftc.exe" -ArgumentList "--version" --Wait
+          Start-Process -FilePath "$env:SystemDrive\Users\runneradmin\AppData\Local\Programs\Swift\Toolchains\6.0.0+Asserts\usr\bin\swiftc.exe" -ArgumentList "--version" -Wait
 
       # - name: Prepare mm-sdk
       #   id: prepare-sdk
