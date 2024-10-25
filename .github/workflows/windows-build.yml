@@ -1,0 +1,179 @@
+name: Reusable build workflow
+
+
+on:
+  workflow_call:
+
+
+env:
+  SDK_VERSION: '1.1.0-alpha.4'
+  WIN_X64_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.4/mm-sdk-1.1.0-alpha.4-macOS.zip'
+  WIN_ARM64_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.4/mm-sdk-1.1.0-alpha.4-macOS.zip'
+  SWIFT_X64: 'https://download.swift.org/development/windows10/swift-DEVELOPMENT-SNAPSHOT-2024-09-24-a/swift-DEVELOPMENT-SNAPSHOT-2024-09-24-a-windows10.exe'
+  SWIFT_ARM64: 'https://download.swift.org/development/windows10-arm64/swift-DEVELOPMENT-SNAPSHOT-2024-09-24-a/swift-DEVELOPMENT-SNAPSHOT-2024-09-24-a-windows10-arm64.exe'
+
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-2022]
+        # swift: ["6.0"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check action type
+        run: |
+          echo "OS: $RUNNER_OS"
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Commit: $GITHUB_SHA"
+          echo "Branch: `git rev-parse --abbrev-ref HEAD`"
+
+      # - name: Prepare Swift environment
+      #   uses: swift-actions/setup-swift@v1
+      #   with:
+      #     swift-version: ${{ matrix.swift }}
+
+      # - name: Get Swift version
+      #   run: swift --version
+
+      - name: Prepare Swift enviroment
+        run: |
+          if [ "$RUNNER_ARCH" == 'X64' ];then
+            $url = ${{ env.SWIFT_X64 }}
+          elif [ "$RUNNER_ARCH" == 'ARM64' ];then
+            $url = ${{ env.SWIFT_ARM64 }}
+          else
+            echo "Unsupported ARCH $RUNNER_ARCH"
+            exit 1
+          fi
+
+          $outputPath = 'C:\swift.exe'
+          Invoke-WebRequest -Uri $url -OutFile $outputPath
+
+      # - name: Get Swift version
+      #   run: swift --version
+
+      # - name: Prepare mm-sdk
+      #   id: prepare-sdk
+      #   run: |
+      #     echo "Get mm-sdk on $RUNNER_OS $RUNNER_ARCH"
+      #     if [ "$RUNNER_OS" == 'Linux' ];then
+      #       wget ${{ env.LINUX_SDK }} -O ~/sdk.tar.bz2
+      #       tar -jxvf ~/sdk.tar.bz2 -C ~/
+      #     elif [ "$RUNNER_OS" == 'macOS' ];then
+      #       if [ "$RUNNER_ARCH" == 'X64' ];then
+      #         wget ${{ env.MACOS_X64_SDK }} -O ~/sdk.zip
+      #       elif [ "$RUNNER_ARCH" == 'ARM64' ];then
+      #         wget ${{ env.MACOS_ARM64_SDK }} -O ~/sdk.zip
+      #       else
+      #         echo "Unsupported ARCH $RUNNER_ARCH"
+      #         exit 1
+      #       fi
+      #       unzip ~/sdk.zip -d ~/
+      #     else
+      #       echo "Unrecognized OS $RUNNER_OS"
+      #       exit 1
+      #     fi
+      #     echo "SDK_VERSION=$(~/mm-sdk/usr/mm/mm --version)" >> $GITHUB_OUTPUT
+      
+      # - name: Abort if mm-sdk version not match
+      #   if: ${{ steps.prepare-sdk.outputs.SDK_VERSION != env.SDK_VERSION }}
+      #   run: |
+      #     echo "Required SDK version: ${{ env.SDK_VERSION }}"
+      #     echo "Current SDK version: ${{ steps.prepare-sdk.outputs.SDK_VERSION }}"
+      #     exit 1
+
+      # - name: Build default project
+      #   id: build-project
+      #   run: |
+      #     cd $GITHUB_WORKSPACE
+      #     rm -rf .build
+      #     rm -rf Package.resolved
+      #     if [ -f "Package.swift" ]; then
+      #       ~/mm-sdk/usr/mm/mm build
+      #     fi
+      #     rm -rf .build
+      #     rm -rf Package.resolved
+      #     echo "EXAMPLES=$(find . -maxdepth 1 -name "Examples")" >> $GITHUB_OUTPUT
+
+      # - name: Build default examples
+      #   if: ${{ steps.build-project.outputs.EXAMPLES != '' }}
+      #   run: |
+      #     REPO_ADDR=${GITHUB_REPOSITORY#*/}.git
+      #     find $GITHUB_WORKSPACE/Examples -name "Package.swift" > $GITHUB_WORKSPACE/examples.txt
+      #     dirarray=($(cat $GITHUB_WORKSPACE/examples.txt))
+
+      #     for item in "${dirarray[@]}"; do
+      #       example_path=$(dirname "${item}")
+      #       cd $example_path
+      #       echo "In example path: $example_path"
+
+      #       if [ -f "$GITHUB_WORKSPACE/Package.swift" ]; then
+      #         LINE_NUMBER=$(sed -n "/$REPO_ADDR/=" ./Package.swift)
+      #         if [ -n "$LINE_NUMBER" ]; then
+      #           echo "Modifying line $LINE_NUMBER from:"
+      #           cat ./Package.swift | head -n "$LINE_NUMBER" | tail -n 1
+      #           sed -i'.bak' -e ""$LINE_NUMBER"s#madmachineio#"$GITHUB_REPOSITORY_OWNER"#g" ./Package.swift
+      #           sed -i'.bak' -e ""$LINE_NUMBER"s#.branch(\"main\")#.revision(\"$GITHUB_SHA\")#g" ./Package.swift
+      #           if [ "$RUNNER_OS" == 'Linux' ]; then
+      #             sed -i'.bak' -e ""$LINE_NUMBER"s#branch:\s*\"main\"#revision: \"$GITHUB_SHA\"#g" ./Package.swift
+      #           elif [ "$RUNNER_OS" == 'macOS' ]; then
+      #             sed -i'.bak' -e ""$LINE_NUMBER"s#branch: *\"main\"#revision: \"$GITHUB_SHA\"#g" ./Package.swift
+      #           else
+      #             echo "Unrecognized OS $RUNNER_OS"
+      #             exit 1
+      #           fi
+      #           echo "to:"
+      #           cat ./Package.swift | head -n "$LINE_NUMBER" | tail -n 1
+      #         fi
+      #       fi
+
+      #       rm -rf .build
+      #       rm -rf Package.resolved
+      #       ~/mm-sdk/usr/mm/mm build
+      #       rm -rf .build
+      #       rm -rf Package.resolved
+      #     done
+
+      # - name: CI Build project
+      #   run: |
+      #     cd $GITHUB_WORKSPACE
+      #     rm -rf .build
+      #     rm -rf Package.resolved
+      #     if [ -f "Package.swift" ]; then
+      #       ~/mm-sdk/usr/mm/mm ci-build
+      #     fi
+      #     rm -rf .build
+      #     rm -rf Package.resolved
+
+      # - name: CI Build examples
+      #   if: ${{ steps.build-project.outputs.EXAMPLES != '' }}
+      #   run: |
+      #     REPO_ADDR=${GITHUB_REPOSITORY#*/}.git
+      #     dirarray=($(cat $GITHUB_WORKSPACE/examples.txt))
+
+      #     for item in "${dirarray[@]}"; do
+      #       example_path=$(dirname "${item}")
+      #       cd $example_path
+      #       echo "In example path: $example_path"
+
+      #       rm -rf .build
+      #       rm -rf Package.resolved
+      #       ~/mm-sdk/usr/mm/mm ci-build
+      #       rm -rf .build
+      #       rm -rf Package.resolved
+
+      #       cp -rf armv7em-none-none-eabi* $GITHUB_WORKSPACE
+      #     done
+
+      # - name: Upload artifacts
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: Binary build on ${{ matrix.os }}
+      #     path: |
+      #       armv7em-none-none-eabi
+      #     retention-days: 7
