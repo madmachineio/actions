@@ -51,7 +51,7 @@ jobs:
             exit 1
           }
 
-          ehco $url
+          echo $url
           $outputPath = 'C:\swift.exe'
           Invoke-WebRequest -Uri $url -OutFile $outputPath
 
