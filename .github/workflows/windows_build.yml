@@ -54,10 +54,11 @@ jobs:
           $outputPath = "C:\swift.exe"
           Invoke-WebRequest -Uri $url -OutFile $outputPath
           Start-Process -FilePath "$outputPath" -ArgumentList "/silent", "/verysilent" -Wait
-          Get-ChildItem "$env:SystemDrive\Users"
+          Get-ChildItem "$env:SystemDrive\Users\runneradmin\AppData\Local\Programs\Swift\Toolchains\6.0.0+Asserts\usr"
 
-      # - name: Get Swift version
-      #   run: swift --version
+      - name: Get Swift version
+        run: |
+          & "$env:SystemDrive\Users\runneradmin\AppData\Local\Programs\Swift\Toolchains\6.0.0+Asserts\usr\bin\swiftc.exe" --version
 
       # - name: Prepare mm-sdk
       #   id: prepare-sdk
