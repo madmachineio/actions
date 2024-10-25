@@ -30,7 +30,7 @@ jobs:
           echo "OS: $RUNNER_OS"
           echo "Repository: $GITHUB_REPOSITORY"
           echo "Commit: $GITHUB_SHA"
-          echo "Branch: `git rev-parse --abbrev-ref HEAD`"
+          echo "Branch: $(git rev-parse --abbrev-ref HEAD)"
 
       # - name: Prepare Swift environment
       #   uses: swift-actions/setup-swift@v1
