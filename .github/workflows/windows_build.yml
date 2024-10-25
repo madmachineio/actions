@@ -1,4 +1,4 @@
-name: Reusable build workflow
+name: Reusable windows build workflow
 
 
 on:
@@ -7,8 +7,8 @@ on:
 
 env:
   SDK_VERSION: '1.1.0-alpha.4'
-  WIN_X64_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.4/mm-sdk-1.1.0-alpha.4-macOS.zip'
-  WIN_ARM64_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.4/mm-sdk-1.1.0-alpha.4-macOS.zip'
+  WIN_X64_SDK: ''
+  WIN_ARM64_SDK: ''
   SWIFT_X64: 'https://download.swift.org/development/windows10/swift-DEVELOPMENT-SNAPSHOT-2024-09-24-a/swift-DEVELOPMENT-SNAPSHOT-2024-09-24-a-windows10.exe'
   SWIFT_ARM64: 'https://download.swift.org/development/windows10-arm64/swift-DEVELOPMENT-SNAPSHOT-2024-09-24-a/swift-DEVELOPMENT-SNAPSHOT-2024-09-24-a-windows10-arm64.exe'
 
