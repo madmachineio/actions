@@ -42,14 +42,14 @@ jobs:
 
       - name: Prepare Swift enviroment
         run: |
-          if [ "$RUNNER_ARCH" == 'X64' ];then
-            $url = ${{ env.SWIFT_X64 }}
-          elif [ "$RUNNER_ARCH" == 'ARM64' ];then
-            $url = ${{ env.SWIFT_ARM64 }}
-          else
+          if ($env:RUNNER_ARCH -eq "X64") {
+            $url = $env:SWIFT_X64
+          } elseif ($env:RUNNER_ARCH -eq "ARM64") {
+            $url = $env:SWIFT_ARM64
+          } else {
             echo "Unsupported ARCH $RUNNER_ARCH"
             exit 1
-          fi
+          }
 
           $outputPath = 'C:\swift.exe'
           Invoke-WebRequest -Uri $url -OutFile $outputPath
