@@ -9,8 +9,8 @@ env:
   SDK_VERSION: "1.1.0-alpha.6"
   WIN_X64_SDK: ""
   WIN_ARM64_SDK: ""
-  SWIFT_X64: "https://download.swift.org/development/windows10/swift-DEVELOPMENT-SNAPSHOT-2024-10-25-a/swift-DEVELOPMENT-SNAPSHOT-2024-10-25-a-windows10.exe"
-  SWIFT_ARM64: "https://download.swift.org/development/windows10-arm64/swift-DEVELOPMENT-SNAPSHOT-2024-10-25-a/swift-DEVELOPMENT-SNAPSHOT-2024-10-25-a-windows10-arm64.exe"
+  SWIFT_X64: "https://download.swift.org/development/windows10/swift-DEVELOPMENT-SNAPSHOT-2024-11-09-a/swift-DEVELOPMENT-SNAPSHOT-2024-11-09-a-windows10.exe"
+  SWIFT_ARM64: "https://download.swift.org/development/windows10-arm64/swift-DEVELOPMENT-SNAPSHOT-2024-11-09-a/swift-DEVELOPMENT-SNAPSHOT-2024-11-09-a-windows10-arm64.exe"
 
 
 jobs:

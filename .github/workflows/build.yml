@@ -11,8 +11,8 @@ env:
   MACOS_X64_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.6/mm-sdk-1.1.0-alpha.6-macOS.zip'
   MACOS_ARM64_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.6/mm-sdk-1.1.0-alpha.6-macOS.zip'
 
-  SWIFT_MACOS: 'https://download.swift.org/development/xcode/swift-DEVELOPMENT-SNAPSHOT-2024-10-30-a/swift-DEVELOPMENT-SNAPSHOT-2024-10-30-a-osx.pkg'
-  SWIFT_LINUX: 'https://download.swift.org/development/ubuntu2204/swift-DEVELOPMENT-SNAPSHOT-2024-10-30-a/swift-DEVELOPMENT-SNAPSHOT-2024-10-30-a-ubuntu22.04.tar.gz'
+  SWIFT_MACOS: 'https://download.swift.org/development/xcode/swift-DEVELOPMENT-SNAPSHOT-2024-11-09-a/swift-DEVELOPMENT-SNAPSHOT-2024-11-09-a-osx.pkg'
+  SWIFT_LINUX: 'https://download.swift.org/development/ubuntu2204/swift-DEVELOPMENT-SNAPSHOT-2024-11-09-a/swift-DEVELOPMENT-SNAPSHOT-2024-11-09-a-ubuntu22.04.tar.gz'
 
 
 jobs:
