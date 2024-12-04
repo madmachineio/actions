@@ -6,13 +6,15 @@ on:
 
 
 env:
-  SDK_VERSION: '1.1.0-alpha.6'
-  LINUX_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.6/mm-sdk-1.1.0-alpha.6-ubuntu22.04-x64.tar.bz2'
-  MACOS_X64_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.6/mm-sdk-1.1.0-alpha.6-macOS.zip'
-  MACOS_ARM64_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.6/mm-sdk-1.1.0-alpha.6-macOS.zip'
+  SDK_VERSION: '1.1.0-alpha.7'
+  MACOS_X64_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.7/mm-sdk-1.1.0-alpha.7-macOS.zip'
+  MACOS_ARM64_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.7/mm-sdk-1.1.0-alpha.7-macOS.zip'
+  LINUX_X64_22_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.7/mm-sdk-1.1.0-alpha.7-ubuntu22.04-x64.tar.bz2'
+  LINUX_X64_24_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.7/mm-sdk-1.1.0-alpha.7-ubuntu24.04-x64.tar.bz2'
 
   SWIFT_MACOS: 'https://download.swift.org/swift-6.1-branch/xcode/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-02-a/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-02-a-osx.pkg'
-  SWIFT_LINUX: 'https://download.swift.org/swift-6.1-branch/ubuntu2204/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-02-a/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-02-a-ubuntu22.04.tar.gz'
+  SWIFT_LINUX22: 'https://download.swift.org/swift-6.1-branch/ubuntu2204/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-02-a/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-02-a-ubuntu22.04.tar.gz'
+  SWIFT_LINUX24: 'https://download.swift.org/swift-6.1-branch/ubuntu2404/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-02-a/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-02-a-ubuntu24.04.tar.gz'
 
 
 jobs:
@@ -20,7 +22,7 @@ jobs:
     name: Test on ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-22.04]
+        os: [ubuntu-22.04, ubuntu-24.04]
         # swift: ["6.0"]
     runs-on: ${{ matrix.os }}
     steps:
@@ -55,8 +57,16 @@ jobs:
             fi
             sudo mkdir -p /Library/Developer/Toolchains
             sudo installer -pkg ~/swift.pkg -target /Library/Developer/Toolchains
-          elif [ "$RUNNER_OS" == 'Linux' ];then 
-            wget -q ${{ env.SWIFT_LINUX }} -O ~/swift.tar.gz
+          elif [ "$RUNNER_OS" == 'Linux' ];then
+            source /etc/os-release
+            if [ "$VERSION_ID" = "22.04" ]; then
+              wget -q ${{ env.SWIFT_LINUX22 }} -O ~/swift.tar.gz
+            elif [ "$VERSION_ID" = "24.04" ]; then
+              wget -q ${{ env.SWIFT_LINUX24 }} -O ~/swift.tar.gz
+            else
+              echo "Unknown Ubuntu version"
+              exit 1
+            fi
             mkdir ~/mm-sdk
             tar -zxvf ~/swift.tar.gz --strip-components 1 -C ~/mm-sdk
           fi
@@ -65,10 +75,7 @@ jobs:
         id: prepare-sdk
         run: |
           echo "Get mm-sdk on $RUNNER_OS $RUNNER_ARCH"
-          if [ "$RUNNER_OS" == 'Linux' ];then
-            wget ${{ env.LINUX_SDK }} -O ~/sdk.tar.bz2
-            tar -jxvf ~/sdk.tar.bz2 -C ~/
-          elif [ "$RUNNER_OS" == 'macOS' ];then
+          if [ "$RUNNER_OS" == 'macOS' ];then
             if [ "$RUNNER_ARCH" == 'X64' ];then
               wget ${{ env.MACOS_X64_SDK }} -O ~/sdk.zip
             elif [ "$RUNNER_ARCH" == 'ARM64' ];then
@@ -78,6 +85,17 @@ jobs:
               exit 1
             fi
             unzip ~/sdk.zip -d ~/
+          elif [ "$RUNNER_OS" == 'Linux' ];then
+            source /etc/os-release
+            if [ "$VERSION_ID" = "22.04" ]; then
+              wget ${{ env.LINUX_X64_22_SDK }} -O ~/sdk.tar.bz2
+            elif [ "$VERSION_ID" = "24.04" ]; then
+              wget ${{ env.LINUX_X64_24_SDK }} -O ~/sdk.tar.bz2
+            else
+              echo "Unknown Ubuntu version"
+              exit 1
+            fi
+            tar -jxvf ~/sdk.tar.bz2 -C ~/
           else
             echo "Unrecognized OS $RUNNER_OS"
             exit 1
