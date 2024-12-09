@@ -5,13 +5,13 @@ on:
   workflow_call:
 
 
-env:
-  SDK_VERSION: "1.1.0-alpha.8"
-  WIN_X64_SDK: ""
-  WIN_ARM64_SDK: ""
+# env:
+#   SDK_VERSION: "1.1.0-alpha.8"
+#   SDK_X64_WIN: ""
+#   SDK_ARM64_WIN: ""
 
-  SWIFT_X64: "https://download.swift.org/development/windows10/swift-DEVELOPMENT-SNAPSHOT-2024-11-09-a/swift-DEVELOPMENT-SNAPSHOT-2024-11-09-a-windows10.exe"
-  SWIFT_ARM64: "https://download.swift.org/development/windows10-arm64/swift-DEVELOPMENT-SNAPSHOT-2024-11-09-a/swift-DEVELOPMENT-SNAPSHOT-2024-11-09-a-windows10-arm64.exe"
+#   SWIFT_X64_WIN: "https://download.swift.org/development/windows10/swift-DEVELOPMENT-SNAPSHOT-2024-11-09-a/swift-DEVELOPMENT-SNAPSHOT-2024-11-09-a-windows10.exe"
+#   SWIFT_ARM64_WIN: "https://download.swift.org/development/windows10-arm64/swift-DEVELOPMENT-SNAPSHOT-2024-11-09-a/swift-DEVELOPMENT-SNAPSHOT-2024-11-09-a-windows10-arm64.exe"
 
 
 jobs:
@@ -44,9 +44,9 @@ jobs:
       - name: Prepare Swift enviroment
         run: |
           if ($env:RUNNER_ARCH -eq "X64") {
-            $url = $env:SWIFT_X64
+            $url = $env:SWIFT_X64_WIN
           } elseif ($env:RUNNER_ARCH -eq "ARM64") {
-            $url = $env:SWIFT_ARM64
+            $url = $env:SWIFT_ARM64_WIN
           } else {
             echo "Unsupported ARCH $env:RUNNER_ARCH"
             exit 1
@@ -70,9 +70,9 @@ jobs:
       #       tar -jxvf ~/sdk.tar.bz2 -C ~/
       #     elif [ "$RUNNER_OS" == 'macOS' ];then
       #       if [ "$RUNNER_ARCH" == 'X64' ];then
-      #         wget ${{ env.MACOS_X64_SDK }} -O ~/sdk.zip
+      #         wget ${{ env.SDK_X64_MACOS }} -O ~/sdk.zip
       #       elif [ "$RUNNER_ARCH" == 'ARM64' ];then
-      #         wget ${{ env.MACOS_ARM64_SDK }} -O ~/sdk.zip
+      #         wget ${{ env.SDK_ARM64_MACOS }} -O ~/sdk.zip
       #       else
       #         echo "Unsupported ARCH $RUNNER_ARCH"
       #         exit 1

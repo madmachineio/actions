@@ -5,16 +5,16 @@ on:
   workflow_call:
 
 
-env:
-  SDK_VERSION: '1.1.0-alpha.8'
-  MACOS_X64_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.8/mm-sdk-1.1.0-alpha.8-macOS.zip'
-  MACOS_ARM64_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.8/mm-sdk-1.1.0-alpha.8-macOS.zip'
-  LINUX_X64_22_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.8/mm-sdk-1.1.0-alpha.8-ubuntu22.04-x64.tar.bz2'
-  LINUX_X64_24_SDK: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.8/mm-sdk-1.1.0-alpha.8-ubuntu24.04-x64.tar.bz2'
+# env:
+#   SDK_VERSION: '1.1.0-alpha.8'
+#   SDK_X64_MACOS: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.8/mm-sdk-1.1.0-alpha.8-macOS.zip'
+#   SDK_ARM64_MACOS: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.8/mm-sdk-1.1.0-alpha.8-macOS.zip'
+#   SDK_X64_LINUX22: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.8/mm-sdk-1.1.0-alpha.8-ubuntu22.04-x64.tar.bz2'
+#   SDK_X64_LINUX24: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.8/mm-sdk-1.1.0-alpha.8-ubuntu24.04-x64.tar.bz2'
 
-  SWIFT_MACOS: 'https://download.swift.org/swift-6.1-branch/xcode/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-04-a/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-04-a-osx.pkg'
-  SWIFT_LINUX22: 'https://download.swift.org/swift-6.1-branch/ubuntu2204/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-04-a/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-04-a-ubuntu22.04.tar.gz'
-  SWIFT_LINUX24: 'https://download.swift.org/swift-6.1-branch/ubuntu2404/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-04-a/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-04-a-ubuntu24.04.tar.gz'
+#   SWIFT_MACOS: 'https://download.swift.org/swift-6.1-branch/xcode/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-04-a/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-04-a-osx.pkg'
+#   SWIFT_X64_LINUX22: 'https://download.swift.org/swift-6.1-branch/ubuntu2204/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-04-a/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-04-a-ubuntu22.04.tar.gz'
+#   SWIFT_X64_LINUX24: 'https://download.swift.org/swift-6.1-branch/ubuntu2404/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-04-a/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-04-a-ubuntu24.04.tar.gz'
 
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
     name: Test on ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-22.04, ubuntu-24.04]
+        os: [ubuntu-24.04]
         # swift: ["6.0"]
     runs-on: ${{ matrix.os }}
     steps:
@@ -60,9 +60,9 @@ jobs:
           elif [ "$RUNNER_OS" == 'Linux' ];then
             source /etc/os-release
             if [ "$VERSION_ID" = "22.04" ]; then
-              wget -q ${{ env.SWIFT_LINUX22 }} -O ~/swift.tar.gz
+              wget -q ${{ env.SWIFT_X64_LINUX22 }} -O ~/swift.tar.gz
             elif [ "$VERSION_ID" = "24.04" ]; then
-              wget -q ${{ env.SWIFT_LINUX24 }} -O ~/swift.tar.gz
+              wget -q ${{ env.SWIFT_X64_LINUX24 }} -O ~/swift.tar.gz
             else
               echo "Unknown Ubuntu version"
               exit 1
@@ -77,9 +77,9 @@ jobs:
           echo "Get mm-sdk on $RUNNER_OS $RUNNER_ARCH"
           if [ "$RUNNER_OS" == 'macOS' ];then
             if [ "$RUNNER_ARCH" == 'X64' ];then
-              wget ${{ env.MACOS_X64_SDK }} -O ~/sdk.zip
+              wget ${{ env.SDK_X64_MACOS }} -O ~/sdk.zip
             elif [ "$RUNNER_ARCH" == 'ARM64' ];then
-              wget ${{ env.MACOS_ARM64_SDK }} -O ~/sdk.zip
+              wget ${{ env.SDK_ARM64_MACOS }} -O ~/sdk.zip
             else
               echo "Unsupported ARCH $RUNNER_ARCH"
               exit 1
@@ -88,9 +88,9 @@ jobs:
           elif [ "$RUNNER_OS" == 'Linux' ];then
             source /etc/os-release
             if [ "$VERSION_ID" = "22.04" ]; then
-              wget ${{ env.LINUX_X64_22_SDK }} -O ~/sdk.tar.bz2
+              wget ${{ env.SDK_X64_LINUX22 }} -O ~/sdk.tar.bz2
             elif [ "$VERSION_ID" = "24.04" ]; then
-              wget ${{ env.LINUX_X64_24_SDK }} -O ~/sdk.tar.bz2
+              wget ${{ env.SDK_X64_LINUX24 }} -O ~/sdk.tar.bz2
             else
               echo "Unknown Ubuntu version"
               exit 1
