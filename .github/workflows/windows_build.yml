@@ -66,13 +66,13 @@ jobs:
       #   run: |
       #     echo "Get mm-sdk on $RUNNER_OS $RUNNER_ARCH"
       #     if [ "$RUNNER_OS" == 'Linux' ];then
-      #       wget ${{ env.LINUX_SDK }} -O ~/sdk.tar.bz2
+      #       wget ${{ var.LINUX_SDK }} -O ~/sdk.tar.bz2
       #       tar -jxvf ~/sdk.tar.bz2 -C ~/
       #     elif [ "$RUNNER_OS" == 'macOS' ];then
       #       if [ "$RUNNER_ARCH" == 'X64' ];then
-      #         wget ${{ env.SDK_X64_MACOS }} -O ~/sdk.zip
+      #         wget ${{ var.SDK_X64_MACOS }} -O ~/sdk.zip
       #       elif [ "$RUNNER_ARCH" == 'ARM64' ];then
-      #         wget ${{ env.SDK_ARM64_MACOS }} -O ~/sdk.zip
+      #         wget ${{ var.SDK_ARM64_MACOS }} -O ~/sdk.zip
       #       else
       #         echo "Unsupported ARCH $RUNNER_ARCH"
       #         exit 1
@@ -85,9 +85,9 @@ jobs:
       #     echo "SDK_VERSION=$(~/mm-sdk/usr/mm/mm --version)" >> $GITHUB_OUTPUT
       
       # - name: Abort if mm-sdk version not match
-      #   if: ${{ steps.prepare-sdk.outputs.SDK_VERSION != env.SDK_VERSION }}
+      #   if: ${{ steps.prepare-sdk.outputs.SDK_VERSION != var.SDK_VERSION }}
       #   run: |
-      #     echo "Required SDK version: ${{ env.SDK_VERSION }}"
+      #     echo "Required SDK version: ${{ var.SDK_VERSION }}"
       #     echo "Current SDK version: ${{ steps.prepare-sdk.outputs.SDK_VERSION }}"
       #     exit 1
 

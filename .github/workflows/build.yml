@@ -48,9 +48,9 @@ jobs:
         run: |
           if [ "$RUNNER_OS" == 'macOS' ];then
             if [ "$RUNNER_ARCH" == 'X64' ];then
-              wget -q ${{ env.SWIFT_MACOS }} -O ~/swift.pkg
+              wget -q ${{ var.SWIFT_MACOS }} -O ~/swift.pkg
             elif [ "$RUNNER_ARCH" == 'ARM64' ];then
-              wget -q ${{ env.SWIFT_MACOS }} -O ~/swift.pkg
+              wget -q ${{ var.SWIFT_MACOS }} -O ~/swift.pkg
             else
               echo "Unsupported ARCH $RUNNER_ARCH"
               exit 1
@@ -60,9 +60,9 @@ jobs:
           elif [ "$RUNNER_OS" == 'Linux' ];then
             source /etc/os-release
             if [ "$VERSION_ID" = "22.04" ]; then
-              wget -q ${{ env.SWIFT_X64_LINUX22 }} -O ~/swift.tar.gz
+              wget -q ${{ var.SWIFT_X64_LINUX22 }} -O ~/swift.tar.gz
             elif [ "$VERSION_ID" = "24.04" ]; then
-              wget -q ${{ env.SWIFT_X64_LINUX24 }} -O ~/swift.tar.gz
+              wget -q ${{ var.SWIFT_X64_LINUX24 }} -O ~/swift.tar.gz
             else
               echo "Unknown Ubuntu version"
               exit 1
@@ -80,9 +80,9 @@ jobs:
           echo "Get mm-sdk on $RUNNER_OS $RUNNER_ARCH"
           if [ "$RUNNER_OS" == 'macOS' ];then
             if [ "$RUNNER_ARCH" == 'X64' ];then
-              wget ${{ env.SDK_X64_MACOS }} -O ~/sdk.zip
+              wget ${{ var.SDK_X64_MACOS }} -O ~/sdk.zip
             elif [ "$RUNNER_ARCH" == 'ARM64' ];then
-              wget ${{ env.SDK_ARM64_MACOS }} -O ~/sdk.zip
+              wget ${{ var.SDK_ARM64_MACOS }} -O ~/sdk.zip
             else
               echo "Unsupported ARCH $RUNNER_ARCH"
               exit 1
@@ -91,9 +91,9 @@ jobs:
           elif [ "$RUNNER_OS" == 'Linux' ];then
             source /etc/os-release
             if [ "$VERSION_ID" = "22.04" ]; then
-              wget ${{ env.SDK_X64_LINUX22 }} -O ~/sdk.tar.bz2
+              wget ${{ var.SDK_X64_LINUX22 }} -O ~/sdk.tar.bz2
             elif [ "$VERSION_ID" = "24.04" ]; then
-              wget ${{ env.SDK_X64_LINUX24 }} -O ~/sdk.tar.bz2
+              wget ${{ var.SDK_X64_LINUX24 }} -O ~/sdk.tar.bz2
             else
               echo "Unknown Ubuntu version"
               exit 1
@@ -106,9 +106,9 @@ jobs:
           echo "SDK_VERSION=$(~/mm-sdk/usr/mm/mm --version)" >> $GITHUB_OUTPUT
       
       - name: Abort if mm-sdk version not match
-        if: ${{ steps.prepare-sdk.outputs.SDK_VERSION != env.SDK_VERSION }}
+        if: ${{ steps.prepare-sdk.outputs.SDK_VERSION != var.SDK_VERSION }}
         run: |
-          echo "Required SDK version: ${{ env.SDK_VERSION }}"
+          echo "Required SDK version: ${{ var.SDK_VERSION }}"
           echo "Current SDK version: ${{ steps.prepare-sdk.outputs.SDK_VERSION }}"
           exit 1
 
