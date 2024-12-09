@@ -1,4 +1,4 @@
-name: Reusable mock test workflow for Swift Package
+name: Reusable release workflow
 
 
 on:
@@ -18,11 +18,11 @@ on:
 
 
 jobs:
-  mock_test:
-    name: Test on ${{ matrix.os }}
+  build:
+    name: Build on ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-24.04]
+        os: [ubuntu-22.04, ubuntu-24.04, macos-13, macos-14, macos-15]
         # swift: ["6.0"]
     runs-on: ${{ matrix.os }}
     steps:
@@ -71,6 +71,9 @@ jobs:
             tar -zxvf ~/swift.tar.gz --strip-components 1 -C ~/mm-sdk
           fi
 
+      # - name: Get Swift version
+      #   run: swift --version
+
       - name: Prepare mm-sdk
         id: prepare-sdk
         run: |
@@ -109,18 +112,93 @@ jobs:
           echo "Current SDK version: ${{ steps.prepare-sdk.outputs.SDK_VERSION }}"
           exit 1
 
-      - name: Run mock test
+      - name: Build default project
+        id: build-project
         run: |
           cd $GITHUB_WORKSPACE
           rm -rf .build
           rm -rf Package.resolved
-          rm -rf info.lcov
-          ~/mm-sdk/usr/mm/mm host-test
-          if [ ! -f "info.lcov" ]; then
-            exit 1 
+          if [ -f "Package.swift" ]; then
+            ~/mm-sdk/usr/mm/mm build
           fi
+          rm -rf .build
+          rm -rf Package.resolved
+          echo "EXAMPLES=$(find . -maxdepth 1 -name "Examples")" >> $GITHUB_OUTPUT
 
-      - name: Upload code report
-        uses: codecov/codecov-action@v4
+      - name: Build default examples
+        if: ${{ steps.build-project.outputs.EXAMPLES != '' }}
+        run: |
+          REPO_ADDR=${GITHUB_REPOSITORY#*/}.git
+          find $GITHUB_WORKSPACE/Examples -name "Package.swift" > $GITHUB_WORKSPACE/examples.txt
+          dirarray=($(cat $GITHUB_WORKSPACE/examples.txt))
+
+          for item in "${dirarray[@]}"; do
+            example_path=$(dirname "${item}")
+            cd $example_path
+            echo "In example path: $example_path"
+
+            if [ -f "$GITHUB_WORKSPACE/Package.swift" ]; then
+              LINE_NUMBER=$(sed -n "/$REPO_ADDR/=" ./Package.swift)
+              if [ -n "$LINE_NUMBER" ]; then
+                echo "Modifying line $LINE_NUMBER from:"
+                cat ./Package.swift | head -n "$LINE_NUMBER" | tail -n 1
+                sed -i'.bak' -e ""$LINE_NUMBER"s#madmachineio#"$GITHUB_REPOSITORY_OWNER"#g" ./Package.swift
+                sed -i'.bak' -e ""$LINE_NUMBER"s#.branch(\"main\")#.revision(\"$GITHUB_SHA\")#g" ./Package.swift
+                if [ "$RUNNER_OS" == 'Linux' ]; then
+                  sed -i'.bak' -e ""$LINE_NUMBER"s#branch:\s*\"main\"#revision: \"$GITHUB_SHA\"#g" ./Package.swift
+                elif [ "$RUNNER_OS" == 'macOS' ]; then
+                  sed -i'.bak' -e ""$LINE_NUMBER"s#branch: *\"main\"#revision: \"$GITHUB_SHA\"#g" ./Package.swift
+                else
+                  echo "Unrecognized OS $RUNNER_OS"
+                  exit 1
+                fi
+                echo "to:"
+                cat ./Package.swift | head -n "$LINE_NUMBER" | tail -n 1
+              fi
+            fi
+
+            rm -rf .build
+            rm -rf Package.resolved
+            ~/mm-sdk/usr/mm/mm build
+            rm -rf .build
+            rm -rf Package.resolved
+          done
+
+      - name: CI Build project
+        run: |
+          cd $GITHUB_WORKSPACE
+          rm -rf .build
+          rm -rf Package.resolved
+          if [ -f "Package.swift" ]; then
+            ~/mm-sdk/usr/mm/mm ci-build
+          fi
+          rm -rf .build
+          rm -rf Package.resolved
+
+      - name: CI Build examples
+        if: ${{ steps.build-project.outputs.EXAMPLES != '' }}
+        run: |
+          REPO_ADDR=${GITHUB_REPOSITORY#*/}.git
+          dirarray=($(cat $GITHUB_WORKSPACE/examples.txt))
+
+          for item in "${dirarray[@]}"; do
+            example_path=$(dirname "${item}")
+            cd $example_path
+            echo "In example path: $example_path"
+
+            rm -rf .build
+            rm -rf Package.resolved
+            ~/mm-sdk/usr/mm/mm ci-build
+            rm -rf .build
+            rm -rf Package.resolved
+
+            cp -rf armv7em-none-none-eabi* $GITHUB_WORKSPACE
+          done
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
         with:
-          files: ./info.lcov
+          name: Binary build on ${{ matrix.os }}
+          path: |
+            armv7em-none-none-eabi
+          retention-days: 7
