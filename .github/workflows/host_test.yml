@@ -5,18 +5,6 @@ on:
   workflow_call:
 
 
-# env:
-#   SDK_VERSION: '1.1.0-alpha.8'
-#   SDK_X64_MACOS: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.8/mm-sdk-1.1.0-alpha.8-macOS.zip'
-#   SDK_ARM64_MACOS: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.8/mm-sdk-1.1.0-alpha.8-macOS.zip'
-#   SDK_X64_LINUX22: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.8/mm-sdk-1.1.0-alpha.8-ubuntu22.04-x64.tar.bz2'
-#   SDK_X64_LINUX24: 'https://github.com/madmachineio/mm-sdk/releases/download/1.1.0-alpha.8/mm-sdk-1.1.0-alpha.8-ubuntu24.04-x64.tar.bz2'
-
-#   SWIFT_MACOS: 'https://download.swift.org/swift-6.1-branch/xcode/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-04-a/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-04-a-osx.pkg'
-#   SWIFT_X64_LINUX22: 'https://download.swift.org/swift-6.1-branch/ubuntu2204/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-04-a/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-04-a-ubuntu22.04.tar.gz'
-#   SWIFT_X64_LINUX24: 'https://download.swift.org/swift-6.1-branch/ubuntu2404/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-04-a/swift-6.1-DEVELOPMENT-SNAPSHOT-2024-12-04-a-ubuntu24.04.tar.gz'
-
-
 jobs:
   mock_test:
     name: Test on ${{ matrix.os }}

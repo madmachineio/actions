@@ -5,15 +5,6 @@ on:
   workflow_call:
 
 
-# env:
-#   SDK_VERSION: "1.1.0-alpha.8"
-#   SDK_X64_WIN: ""
-#   SDK_ARM64_WIN: ""
-
-#   SWIFT_X64_WIN: "https://download.swift.org/development/windows10/swift-DEVELOPMENT-SNAPSHOT-2024-11-09-a/swift-DEVELOPMENT-SNAPSHOT-2024-11-09-a-windows10.exe"
-#   SWIFT_ARM64_WIN: "https://download.swift.org/development/windows10-arm64/swift-DEVELOPMENT-SNAPSHOT-2024-11-09-a/swift-DEVELOPMENT-SNAPSHOT-2024-11-09-a-windows10-arm64.exe"
-
-
 jobs:
   build:
     name: Build on ${{ matrix.os }}
