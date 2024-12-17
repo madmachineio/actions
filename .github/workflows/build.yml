@@ -112,7 +112,7 @@ jobs:
           if [ -f "Package.swift" ]; then
             ~/mm-sdk/usr/mm/mm build
           fi
-          if [ -d ".build/armv7em-none-none-eabi/release/Modules" ]; then
+          if [ -f ".build/armv7em-none-none-eabi/release/Modules/${{ steps.prepare-sdk.outputs.PORJECT_NAME }}.swiftmodule" ]; then
             mkdir -p armv7em-none-none-eabi/${{ steps.prepare-sdk.outputs.PORJECT_NAME }}.swiftmodule
             cp .build/armv7em-none-none-eabi/release/Modules/${{ steps.prepare-sdk.outputs.PORJECT_NAME }}.swiftmodule ./armv7em-none-none-eabi/${{ steps.prepare-sdk.outputs.PORJECT_NAME }}.swiftmodule/armv7em-none-none-eabi.swiftmodule
             cp .build/armv7em-none-none-eabi/release/Modules/${{ steps.prepare-sdk.outputs.PORJECT_NAME }}.swiftdoc ./armv7em-none-none-eabi/${{ steps.prepare-sdk.outputs.PORJECT_NAME }}.swiftmodule/armv7em-none-none-eabi.swiftdoc
