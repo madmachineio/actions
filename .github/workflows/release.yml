@@ -92,12 +92,15 @@ jobs:
             exit 1
           fi
           echo "SDK_VERSION=$(~/mm-sdk/usr/mm/mm --version)" >> $GITHUB_OUTPUT
+          cd $GITHUB_WORKSPACE
+          echo "PORJECT_NAME=$(~/mm-sdk/usr/mm/mm get)" >> $GITHUB_OUTPUT
       
       - name: Abort if mm-sdk version not match
         if: ${{ steps.prepare-sdk.outputs.SDK_VERSION != vars.SDK_VERSION }}
         run: |
           echo "Required SDK version: ${{ vars.SDK_VERSION }}"
           echo "Current SDK version: ${{ steps.prepare-sdk.outputs.SDK_VERSION }}"
+          echo "Projcct name: ${{ steps.prepare-sdk.outputs.PORJECT_NAME }}"
           exit 1
 
       - name: Build default project
@@ -108,6 +111,11 @@ jobs:
           rm -rf Package.resolved
           if [ -f "Package.swift" ]; then
             ~/mm-sdk/usr/mm/mm build
+          fi
+          if [ -d ".build/armv7em-none-none-eabi/release/Modules"]; then
+            mkdir -p armv7em-none-none-eabi/${{ steps.prepare-sdk.outputs.PORJECT_NAME }}.swiftmodule
+            cp .build/armv7em-none-none-eabi/release/Modules/${{ steps.prepare-sdk.outputs.PORJECT_NAME }}.swiftmodule ./armv7em-none-none-eabi/${{ steps.prepare-sdk.outputs.PORJECT_NAME }}.swiftmodule/armv7em-none-none-eabi.swiftmodule
+            cp .build/armv7em-none-none-eabi/release/Modules/${{ steps.prepare-sdk.outputs.PORJECT_NAME }}.swiftdoc ./armv7em-none-none-eabi/${{ steps.prepare-sdk.outputs.PORJECT_NAME }}.swiftmodule/armv7em-none-none-eabi.swiftdoc
           fi
           rm -rf .build
           rm -rf Package.resolved
