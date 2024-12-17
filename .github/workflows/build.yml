@@ -93,7 +93,7 @@ jobs:
           fi
           echo "SDK_VERSION=$(~/mm-sdk/usr/mm/mm --version)" >> $GITHUB_OUTPUT
           cd $GITHUB_WORKSPACE
-          echo "PORJECT_NAME=$(~/mm-sdk/usr/mm/mm get)" >> $GITHUB_OUTPUT
+          echo "PORJECT_NAME=$(~/mm-sdk/usr/mm/mm get --info name)" >> $GITHUB_OUTPUT
       
       - name: Abort if mm-sdk version not match
         if: ${{ steps.prepare-sdk.outputs.SDK_VERSION != vars.SDK_VERSION }}
