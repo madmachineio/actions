@@ -3,6 +3,11 @@ name: Reusable build workflow
 
 on:
   workflow_call:
+    inputs:
+      runners:
+        description: 'List of runners to use'
+        required: true
+        type: string
 
 
 jobs:
@@ -10,7 +15,7 @@ jobs:
     name: Build on ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-24.04, macos-13]
+        os: ${{ fromJSON(inputs.runners) }}
         # swift: ["6.0"]
     runs-on: ${{ matrix.os }}
     steps:
