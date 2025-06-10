@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         os: ${{ fromJSON(inputs.runners) }}
-        # swift: ["6.0"]
+        swift: ["6.1"]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
@@ -29,43 +29,40 @@ jobs:
           echo "Commit: $GITHUB_SHA"
           echo "Branch: `git rev-parse --abbrev-ref HEAD`"
 
-      # - name: Prepare Swift environment
-      #   uses: swift-actions/setup-swift@v1
-      #   with:
-      #     swift-version: ${{ matrix.swift }}
+      - name: Prepare Swift environment
+        uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: ${{ matrix.swift }}
 
-      # - name: Get Swift version
-      #   run: swift --version
+      - name: Get Swift version
+        run: swift --version
 
-      - name: Prepare Swift enviroment
-        run: |
-          if [ "$RUNNER_OS" == 'macOS' ];then
-            if [ "$RUNNER_ARCH" == 'X64' ];then
-              wget -q ${{ vars.SWIFT_MACOS }} -O ~/swift.pkg
-            elif [ "$RUNNER_ARCH" == 'ARM64' ];then
-              wget -q ${{ vars.SWIFT_MACOS }} -O ~/swift.pkg
-            else
-              echo "Unsupported ARCH $RUNNER_ARCH"
-              exit 1
-            fi
-            sudo mkdir -p /Library/Developer/Toolchains
-            sudo installer -pkg ~/swift.pkg -target /Library/Developer/Toolchains
-          elif [ "$RUNNER_OS" == 'Linux' ];then
-            source /etc/os-release
-            if [ "$VERSION_ID" = "22.04" ]; then
-              wget -q ${{ vars.SWIFT_X64_LINUX22 }} -O ~/swift.tar.gz
-            elif [ "$VERSION_ID" = "24.04" ]; then
-              wget -q ${{ vars.SWIFT_X64_LINUX24 }} -O ~/swift.tar.gz
-            else
-              echo "Unknown Ubuntu version"
-              exit 1
-            fi
-            mkdir ~/mm-sdk
-            tar -zxvf ~/swift.tar.gz --strip-components 1 -C ~/mm-sdk
-          fi
-
-      # - name: Get Swift version
-      #   run: swift --version
+      # - name: Prepare Swift enviroment
+      #   run: |
+      #     if [ "$RUNNER_OS" == 'macOS' ];then
+      #       if [ "$RUNNER_ARCH" == 'X64' ];then
+      #         wget -q ${{ vars.SWIFT_MACOS }} -O ~/swift.pkg
+      #       elif [ "$RUNNER_ARCH" == 'ARM64' ];then
+      #         wget -q ${{ vars.SWIFT_MACOS }} -O ~/swift.pkg
+      #       else
+      #         echo "Unsupported ARCH $RUNNER_ARCH"
+      #         exit 1
+      #       fi
+      #       sudo mkdir -p /Library/Developer/Toolchains
+      #       sudo installer -pkg ~/swift.pkg -target /Library/Developer/Toolchains
+      #     elif [ "$RUNNER_OS" == 'Linux' ];then
+      #       source /etc/os-release
+      #       if [ "$VERSION_ID" = "22.04" ]; then
+      #         wget -q ${{ vars.SWIFT_X64_LINUX22 }} -O ~/swift.tar.gz
+      #       elif [ "$VERSION_ID" = "24.04" ]; then
+      #         wget -q ${{ vars.SWIFT_X64_LINUX24 }} -O ~/swift.tar.gz
+      #       else
+      #         echo "Unknown Ubuntu version"
+      #         exit 1
+      #       fi
+      #       mkdir ~/mm-sdk
+      #       tar -zxvf ~/swift.tar.gz --strip-components 1 -C ~/mm-sdk
+      #     fi
 
       - name: Prepare mm-sdk
         id: prepare-sdk
