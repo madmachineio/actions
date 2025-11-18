@@ -77,9 +77,13 @@ jobs:
             . "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/env.sh" && \
             hash -r
           fi
+          
+          echo "SWIFTLY_HOME_DIR=${SWIFTLY_HOME_DIR}" >>"${GITHUB_ENV}"
+          echo "SWIFTLY_BIN_DIR=${SWIFTLY_BIN_DIR}" >>"${GITHUB_ENV}"
+          echo "${SWIFTLY_BIN_DIR}" >>"${GITHUB_PATH}"
 
       - name: Get Swift version
-        run: swift --version
+        run: swiftc --version
 
       - name: Prepare mm-sdk
         id: prepare-sdk
