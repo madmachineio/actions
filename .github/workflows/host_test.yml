@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-24.04]
-        swift: ["6.1"]
+        #swift: ["6.1"]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
@@ -24,13 +24,13 @@ jobs:
           echo "Commit: $GITHUB_SHA"
           echo "Branch: `git rev-parse --abbrev-ref HEAD`"
 
-      - name: Prepare Swift environment
-        uses: swift-actions/setup-swift@v2
-        with:
-          swift-version: ${{ matrix.swift }}
+      # - name: Prepare Swift environment
+      #   uses: swift-actions/setup-swift@v2
+      #   with:
+      #     swift-version: ${{ matrix.swift }}
 
-      - name: Get Swift version
-        run: swift --version
+      # - name: Get Swift version
+      #   run: swift --version
 
       # - name: Prepare Swift enviroment
       #   run: |
@@ -58,6 +58,30 @@ jobs:
       #       mkdir ~/mm-sdk
       #       tar -zxvf ~/swift.tar.gz --strip-components 1 -C ~/mm-sdk
       #     fi
+
+      - name: Prepare Swift enviroment
+        run: |
+          if [ "$RUNNER_OS" == 'macOS' ];then
+            curl -O https://download.swift.org/swiftly/darwin/swiftly.pkg && \
+            installer -pkg swiftly.pkg -target CurrentUserHomeDirectory && \
+            ~/.swiftly/bin/swiftly init --quiet-shell-followup -y && \
+            . "${SWIFTLY_HOME_DIR:-$HOME/.swiftly}/env.sh" && \
+            hash -r
+          elif [ "$RUNNER_OS" == 'Linux' ];then
+            source /etc/os-release
+            curl -O https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz && \
+            tar zxf swiftly-$(uname -m).tar.gz && \
+            ./swiftly init --quiet-shell-followup -y && \
+            . "${SWIFTLY_HOME_DIR:-$HOME/.local/share/swiftly}/env.sh" && \
+            hash -r
+          fi
+          
+          echo "SWIFTLY_HOME_DIR=${SWIFTLY_HOME_DIR}" >>"${GITHUB_ENV}"
+          echo "SWIFTLY_BIN_DIR=${SWIFTLY_BIN_DIR}" >>"${GITHUB_ENV}"
+          echo "${SWIFTLY_BIN_DIR}" >>"${GITHUB_PATH}"
+
+      - name: Get Swift version
+        run: swiftc --version
 
       - name: Prepare mm-sdk
         id: prepare-sdk

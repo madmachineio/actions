@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         os: ${{ fromJSON(inputs.runners) }}
-        swift: ["6.2"]
+        #swift: ["6.2"]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
@@ -83,7 +83,9 @@ jobs:
           echo "${SWIFTLY_BIN_DIR}" >>"${GITHUB_PATH}"
 
       - name: Get Swift version
-        run: swiftc --version
+        run: |
+          swiftly use --print-location
+          swiftc --version
 
       - name: Prepare mm-sdk
         id: prepare-sdk
